@@ -4,6 +4,7 @@ import useMemoizedFn from '../../useMemoizedFn';
 import useMount from '../../useMount';
 import useUnmount from '../../useUnmount';
 import useUpdate from '../../useUpdate';
+import { isFunction } from '../utils';
 
 import Fetch from './Fetch';
 import type { Options, Plugin, Result, Service } from './types';
@@ -19,7 +20,11 @@ function useRequestImplement<TData, TParams extends any[]>(
     manual,
     ...rest,
   };
-
+  if (!isFunction(service)) {
+    console.error(
+      `useRequestImplement: parameter \`service\` expected to be an asynchronous function, but got "${typeof service}".`,
+    );
+  }
   const serviceRef = useLatest(service);
 
   const update = useUpdate();
